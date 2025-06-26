@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Jamas Keris: Warisan Leluhur</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(#0b0b0b, #1a1a1a);
+      color: #fff;
+      font-family: 'Javanese Text', serif;
+      text-align: center;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 20px;
+      text-shadow: 0 0 10px #ffcc00;
+    }
+    #gameCanvas {
+      border: 4px solid #333;
+      background: radial-gradient(circle, #333, #000);
+      box-shadow: 0 0 20px #000;
+    }
+    button {
+      margin-top: 10px;
+      padding: 12px 24px;
+      background: #440000;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffcc00;
+    }
+    button:hover {
+      background: #660000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jamas Keris: Warisan Leluhur</h1>
+  <p>Gunakan mouse untuk membersihkan keris dan menyelesaikan ritual jamasan</p>
+  <canvas id="gameCanvas" width="320" height="500"></canvas><br>
+  <button onclick="resetGame()">🔁 Ulangi Ritual</button>
+
+  <audio id="gamelanAudio" loop autoplay>
+    <source src="https://cdn.pixabay.com/download/audio/2021/12/24/audio_9e38c8d8a2.mp3?filename=balinese-gamelan-103899.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let kerisCleanLevel = 0;
+
+    const kerisImage = new Image();
+    kerisImage.src = 'https://i.ibb.co/x2Lj0N5/keris.png';
+
+    const smoke = new Image();
+    smoke.src = 'https://i.ibb.co/sg2CmDr/smoke.png'; // gambar asap transparan
+
+    const gamelanAudio = document.getElementById("gamelanAudio");
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (e.buttons === 1) {
+        kerisCleanLevel += 1;
+        if (kerisCleanLevel > 100) kerisCleanLevel = 100;
+        drawGame();
+      }
+    });
+
+    kerisImage.onload = drawGame;
+
+    function drawGame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Background asap mistis
+      for (let i = 0; i < 3; i++) {
+        ctx.globalAlpha = 0.2;
+        ctx.drawImage(smoke, Math.random() * 320, Math.random() * 500, 100, 100);
+      }
+      ctx.globalAlpha = 1;
+
+      // Gambar keris
+      ctx.drawImage(kerisImage, 60, 50, 200, 400);
+
+      // Overlay kotoran jika belum bersih
+      if (kerisCleanLevel < 100) {
+        ctx.fillStyle = 'rgba(139,69,19,0.5)';
+        ctx.fillRect(60, 50, 200, 400 - kerisCleanLevel * 4);
+      } else {
+        ctx.fillStyle = 'gold';
+        ctx.font = '24px serif';
+        ctx.fillText('✨ Keris Bersinar! ✨', 65, 470);
+        showMisticalEffect();
+      }
+    }
+
+    function showMisticalEffect() {
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      for (let i = 0; i < 50; i++) {
+        let x = Math.random() * 320;
+        let y = Math.random() * 500;
+        let radius = Math.random() * 1.5;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function resetGame() {
+      kerisCleanLevel = 0;
+      drawGame();
+    }
+  </script>
+</body>
+</html>
