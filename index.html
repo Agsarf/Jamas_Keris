@@ -1,3 +1,5 @@
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -14,12 +16,14 @@
       text-align: center;
       overflow: hidden;
     }
+
     h1 {
       margin-top: 20px;
       font-size: 3em;
       color: #ffc107;
       text-shadow: 0 0 20px #ff5722, 0 0 30px #ff9800;
     }
+
     canvas {
       background: rgba(0, 0, 0, 0.8);
       border: 4px solid #880e4f;
@@ -27,6 +31,7 @@
       margin-top: 10px;
       cursor: url('https://cur.cursors-4u.net/cursors/cur-9/cur832.cur'), auto;
     }
+
     button {
       margin-top: 15px;
       padding: 12px 24px;
@@ -38,6 +43,7 @@
       border-radius: 8px;
       box-shadow: 0 0 12px #f57c00;
     }
+
     #mistEffect {
       position: absolute;
       top: 0;
@@ -50,29 +56,59 @@
       opacity: 0.1;
       mix-blend-mode: screen;
     }
+
+    #jumpscare {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTm8Ld2s8UyZVAxiefOJMjJE1L9hgdGMeIFA&s'); /* Gambar jumpscare */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      z-index: 9999;
+    }
+
+    footer {
+      font-size: 0.9em;
+      color: #999;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>🔮 Jamas Keris: Ruwatan Leluhur</h1>
-  <p style="font-size: 1.2em; font-family: sans-serif; color: #ccc;">Sucikan pusaka keris dalam ritual kejawen malam 1 Suro. Dengarkan gamelan, hirup dupa mistis, dan sambungkan dirimu dengan roh leluhur...</p>
+  <p style="font-size: 1.2em; font-family: sans-serif; color: #ccc;">
+    Sucikan pusaka keris dalam ritual kejawen malam 1 Suro. Dengarkan gamelan, hirup dupa mistis, dan sambungkan dirimu dengan roh leluhur...
+  </p>
+
   <div id="mistEffect"></div>
+  <div id="jumpscare"></div>
+
   <canvas id="gameCanvas" width="320" height="500"></canvas><br>
-  <button onclick="resetGame()">🔄 Ulangi Ruwatan</button>
+  <button onclick="handleReset()">🔄 Ulangi Ruwatan</button>
 
   <audio id="gamelanSound" loop autoplay>
-    <source src="https://cdn.pixabay.com/audio/2023/03/16/audio_7a00d88ba2.mp3" type="audio/mp3">
+    <source src="lagune-riskul.mp3" type="audio/mp3">
+  </audio>
+  <audio id="screamSound">
+    <source src="hahaha.mp3" type="audio/mp3">
   </audio>
 
   <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const kerisImage = new Image();
-    kerisImage.src = 'data:image/png;base64,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';
+    kerisImage.src = 'data:image/png;base64,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';
 
     let kerisCleanLevel = 0;
     const maxClean = 100;
     let isCleaned = false;
     let auraFlash = 0;
+    let resetCounter = 0;
 
     canvas.addEventListener('mousemove', (e) => {
       if (e.buttons === 1 && !isCleaned) {
@@ -112,19 +148,27 @@
         ctx.font = '22px serif';
         ctx.fillText('✨ Keris Suci & Terjamas ✨', 50, 470);
 
-        // Tambah simbol kejawen
         ctx.font = '48px Jomhuria';
         ctx.fillStyle = 'rgba(255,255,255,0.1)';
         ctx.fillText('ꦥꦶꦁꦏꦤ', 110, 150);
         ctx.fillText('ꦏꦫꦠꦼꦤ꧀', 90, 360);
       }
 
-      // Mist aura effect
       if (Math.random() < 0.05) {
         ctx.fillStyle = 'rgba(255,255,255,0.04)';
         ctx.beginPath();
         ctx.arc(100 + Math.random() * 120, 250 + Math.random() * 200, 40, 0, 2 * Math.PI);
         ctx.fill();
+      }
+    }
+
+    function handleReset() {
+      resetCounter++;
+      if (resetCounter === 1) {
+        triggerJumpscare();
+        resetCounter = 0;
+      } else {
+        resetGame();
       }
     }
 
@@ -134,6 +178,21 @@
       auraFlash = 0;
       drawGame();
     }
+
+    function triggerJumpscare() {
+      const jumpscare = document.getElementById('jumpscare');
+      const scream = document.getElementById('screamSound');
+      jumpscare.style.display = 'block';
+      scream.play();
+      setTimeout(() => {
+        jumpscare.style.display = 'none';
+        resetGame();
+      }, 3000);
+    }
   </script>
+
+  <footer>
+    © 2025 Jamas Keris by Agsarf • Inspirasi Kejawen Digital
+  </footer>
 </body>
 </html>
