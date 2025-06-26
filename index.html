@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>🕯️ Jamas Keris: Ruwatan Leluhur</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jomhuria&display=swap');
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+      color: #ffecb3;
+      font-family: 'Jomhuria', cursive;
+      text-align: center;
+      overflow: hidden;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 3em;
+      color: #ffc107;
+      text-shadow: 0 0 20px #ff5722, 0 0 30px #ff9800;
+    }
+    canvas {
+      background: rgba(0, 0, 0, 0.8);
+      border: 4px solid #880e4f;
+      box-shadow: 0 0 25px #4a148c;
+      margin-top: 10px;
+      cursor: url('https://cur.cursors-4u.net/cursors/cur-9/cur832.cur'), auto;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      background: #3e2723;
+      color: #ffe0b2;
+      border: none;
+      font-weight: bold;
+      font-size: 1.2em;
+      border-radius: 8px;
+      box-shadow: 0 0 12px #f57c00;
+    }
+    #mistEffect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQewmCESN_ntk1fXIvebanpn_AQb1Su4WmWxQ&s');
+      background-size: cover;
+      opacity: 0.1;
+      mix-blend-mode: screen;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔮 Jamas Keris: Ruwatan Leluhur</h1>
+  <p style="font-size: 1.2em; font-family: sans-serif; color: #ccc;">Sucikan pusaka keris dalam ritual kejawen malam 1 Suro. Dengarkan gamelan, hirup dupa mistis, dan sambungkan dirimu dengan roh leluhur...</p>
+  <div id="mistEffect"></div>
+  <canvas id="gameCanvas" width="320" height="500"></canvas><br>
+  <button onclick="resetGame()">🔄 Ulangi Ruwatan</button>
+
+  <audio id="gamelanSound" loop autoplay>
+    <source src="https://cdn.pixabay.com/audio/2023/03/16/audio_7a00d88ba2.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const kerisImage = new Image();
+    kerisImage.src = 'data:image/png;base64,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';
+
+    let kerisCleanLevel = 0;
+    const maxClean = 100;
+    let isCleaned = false;
+    let auraFlash = 0;
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (e.buttons === 1 && !isCleaned) {
+        kerisCleanLevel += 1;
+        if (kerisCleanLevel >= maxClean) {
+          kerisCleanLevel = maxClean;
+          isCleaned = true;
+        }
+        drawGame();
+      }
+    });
+
+    kerisImage.onload = function () {
+      drawGame();
+    };
+
+    function drawGame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(kerisImage, 60, 50, 200, 400);
+
+      if (!isCleaned) {
+        ctx.fillStyle = 'rgba(139,69,19,0.6)';
+        ctx.fillRect(60, 50, 200, 400 - kerisCleanLevel * 4);
+      } else {
+        auraFlash += 0.1;
+        ctx.save();
+        ctx.globalAlpha = 0.6 + 0.4 * Math.sin(auraFlash);
+        ctx.strokeStyle = '#ffe082';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(160, 250, 100, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#ffeb3b';
+        ctx.font = '22px serif';
+        ctx.fillText('✨ Keris Suci & Terjamas ✨', 50, 470);
+
+        // Tambah simbol kejawen
+        ctx.font = '48px Jomhuria';
+        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+        ctx.fillText('ꦥꦶꦁꦏꦤ', 110, 150);
+        ctx.fillText('ꦏꦫꦠꦼꦤ꧀', 90, 360);
+      }
+
+      // Mist aura effect
+      if (Math.random() < 0.05) {
+        ctx.fillStyle = 'rgba(255,255,255,0.04)';
+        ctx.beginPath();
+        ctx.arc(100 + Math.random() * 120, 250 + Math.random() * 200, 40, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    function resetGame() {
+      kerisCleanLevel = 0;
+      isCleaned = false;
+      auraFlash = 0;
+      drawGame();
+    }
+  </script>
+</body>
+</html>
